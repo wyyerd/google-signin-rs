@@ -1,0 +1,21 @@
+[package]
+name = "google-oauth2"
+version = "0.1.0"
+description = "API bindings for the Google OAuth2 Server API"
+authors = ["Kevin Stenerson <kevin@rapiditynetworks.com>"]
+license = "MIT/Apache-2.0"
+keywords = ["google", "oauth", "oauth2", "api"]
+categories = ["api-bindings"]
+
+[features]
+default = ["with-rustls"]
+with-rustls = ["hyper-rustls"]
+with-openssl = ["hyper-openssl"]
+
+[dependencies]
+hyper = "^0.10"
+hyper-rustls = { version = "^0.6", optional = true }
+hyper-openssl = { version = "^0.2", optional = true }
+serde = "^1.0"
+serde_derive = "^1.0"
+serde_json = "^1.0"
