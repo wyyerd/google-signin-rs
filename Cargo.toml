@@ -7,6 +7,9 @@ license = "MIT/Apache-2.0"
 keywords = ["google", "oauth", "oauth2", "api"]
 categories = ["api-bindings"]
 
+[lib]
+name = "google_oauth2"
+
 [features]
 default = ["with-rustls"]
 with-rustls = ["hyper-rustls"]
