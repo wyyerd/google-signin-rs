@@ -6,7 +6,7 @@ use serde_json;
 #[derive(Debug)]
 pub enum Error {
     DecodeJson(serde_json::Error),
-    ConnectionError(Box<std::error::Error>),
+    ConnectionError(Box<std::error::Error + Send + Sync + 'static>),
     InvalidToken,
     InvalidIssuer,
     InvalidAudience,
@@ -49,18 +49,18 @@ impl fmt::Display for Error {
 
 impl From<io::Error> for Error {
     fn from(err: io::Error) -> Error {
-        Error::ConnectionError(err.into())
+        Error::ConnectionError(Box::new(err))
     }
 }
 
 impl From<hyper::Error> for Error {
     fn from(err: hyper::Error) -> Error {
-        Error::ConnectionError(err.into())
+        Error::ConnectionError(Box::new(err))
     }
 }
 
 impl From<serde_json::Error> for Error {
     fn from(err: serde_json::Error) -> Error {
-        Error::DecodeJson(err.into())
+        Error::DecodeJson(err)
     }
 }
