@@ -1,14 +1,11 @@
 [package]
-name = "google-oauth2"
-version = "0.1.0"
+name = "google-signin"
+version = "0.2.0"
 description = "API bindings for the Google OAuth2 Server API"
 authors = ["Kevin Stenerson <kevin@rapiditynetworks.com>"]
 license = "MIT/Apache-2.0"
-keywords = ["google", "oauth", "oauth2", "api"]
+keywords = ["google", "signin", "oauth", "oauth2", "api"]
 categories = ["api-bindings"]
-
-[lib]
-name = "google_oauth2"
 
 [features]
 default = ["with-rustls"]

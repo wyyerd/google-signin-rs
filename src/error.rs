@@ -1,67 +1,66 @@
-extern crate hyper;
-extern crate serde_json as json;
+use std::{self, fmt, io};
+use hyper;
+use serde_json;
 
-use std;
-
-/// An error encountered when communicating with the Google API.
+/// A network or validation error
 #[derive(Debug)]
 pub enum Error {
-    /// An error reported by the Google API.
-    Status(u16),
-    /// A networking error communicating with the Google server.
-    Http(hyper::Error),
-    /// An error reading the response body.
-    Io(std::io::Error),
-    /// An error converting between wire format and Rust types.
-    Conversion(Box<std::error::Error + Send>),
-}
-
-impl std::fmt::Display for Error {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        f.write_str(std::error::Error::description(self))?;
-        match *self {
-            Error::Status(ref err) => write!(f, ": {}", err),
-            Error::Http(ref err) => write!(f, ": {}", err),
-            Error::Io(ref err) => write!(f, ": {}", err),
-            Error::Conversion(ref err) => write!(f, ": {}", err),
-        }
-    }
+    DecodeJson(serde_json::Error),
+    ConnectionError(Box<std::error::Error>),
+    InvalidToken,
+    InvalidIssuer,
+    InvalidAudience,
+    InvalidHostedDomain,
 }
 
 impl std::error::Error for Error {
     fn description(&self) -> &str {
         match *self {
-            Error::Status(_) => "error reported by google api",
-            Error::Http(_) => "error communicating with google servers",
-            Error::Io(_) => "error reading response from google servers",
-            Error::Conversion(_) => "error converting between wire format and Rust types",
+            Error::DecodeJson(ref err) => err.description(),
+            Error::ConnectionError(ref err) => err.description(),
+            Error::InvalidToken => "invalid token",
+            Error::InvalidIssuer => "invalid issuer",
+            Error::InvalidAudience => "invalid audience",
+            Error::InvalidHostedDomain => "invalid hosted domain",
         }
     }
 
     fn cause(&self) -> Option<&std::error::Error> {
         match *self {
-            Error::Status(..) => None,
-            Error::Http(ref err) => Some(err),
-            Error::Io(ref err) => Some(err),
-            Error::Conversion(ref err) => Some(&**err),
+            Error::DecodeJson(ref err) => Some(err),
+            Error::ConnectionError(ref err) => Some(&**err),
+            _ => None,
         }
+    }
+}
+
+impl fmt::Display for Error {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            Error::DecodeJson(ref err) => err.fmt(f),
+            Error::ConnectionError(ref err) => err.fmt(f),
+            Error::InvalidToken => f.write_str("Token was not recognized by google"),
+            Error::InvalidIssuer => f.write_str("Token was not issued by google"),
+            Error::InvalidAudience => f.write_str("Token is for a different google application"),
+            Error::InvalidHostedDomain => f.write_str("User is not a member of the hosted domain(s)"),
+        }
+    }
+}
+
+impl From<io::Error> for Error {
+    fn from(err: io::Error) -> Error {
+        Error::ConnectionError(err.into())
     }
 }
 
 impl From<hyper::Error> for Error {
     fn from(err: hyper::Error) -> Error {
-        Error::Http(err)
+        Error::ConnectionError(err.into())
     }
 }
 
-impl From<std::io::Error> for Error {
-    fn from(err: std::io::Error) -> Error {
-        Error::Io(err)
-    }
-}
-
-impl From<json::Error> for Error {
-    fn from(err: json::Error) -> Error {
-        Error::Conversion(Box::new(err))
+impl From<serde_json::Error> for Error {
+    fn from(err: serde_json::Error) -> Error {
+        Error::DecodeJson(err.into())
     }
 }

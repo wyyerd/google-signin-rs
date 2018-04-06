@@ -8,36 +8,29 @@ Put this in your `Cargo.toml`:
 
 ```toml
 [dependencies]
-google-oauth2 = { git = "ssh://git@git.rapiditynetworks.com/rapidity/google-oauth2-rs.git" }
+google-signin = "0.2.0"
 ```
 
 And this in your crate root:
 
 ```rust
-extern crate google_oauth2;
+extern crate google_signin;
 ```
 
-And then you can verify a google oauth2 token
+And then you can verify a google JSON web token
 
 ```rust
-use google_oauth2 as gapi;
-let auth2 = gapi::Client::new();
-let token = gapi::TokenInfo::get(&auth2, &data.token).expect("Expected token to be valid");
-match token.iss.as_str() {
-    "accounts.google.com" | "https://accounts.google.com" => {}
-    _ => { panic!("Expected token to be issued by Google"); }
-}
-if token.aud != YOUR_CLIENT_ID {
-    panic!("Expected token to be for this OAuth application");
-}
+use google_signin;
+let mut client = google_signin::Client::new();
+client.audiences.push(YOUR_CLIENT_ID); // recommended
+client.hosted_domains.push(YOUR_HOSTED_DOMAIN); // optional
 
-// To restrict login to a specific company / hosted-domain
-let token_domain = token.hd.ok_or_else(|| {
-  panic!("Expected token to have a Hosted Domain")
-});
-if token_domain != YOUR_HOSTED_DOMAIN {
-  panic!("Expected token to be in the same Hosted Domain");
-}
+// Let the crate handle everything for you
+let id_info = client.verify(&data.token).expect("Expected token to be valid");
+println!("Success! Signed-in as {}", id_info.sub);
 
-println!("Success!");
+// Inspect the ID before verifying it
+let id_info = client.get_unsafe(&data.token).expect("Expected token to exist");
+let ok = id_info.verify(&client).is_ok();
+println!("Ok: {}, Info: {:?}", ok, id_info);
 ```

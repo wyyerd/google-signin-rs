@@ -8,10 +8,10 @@ extern crate serde;
 extern crate serde_derive;
 extern crate serde_json;
 
-mod api;
 mod client;
 mod error;
+mod token;
 
-pub use api::TokenInfo;
 pub use client::Client;
 pub use error::Error;
+pub use token::IdInfo;
