@@ -12,7 +12,7 @@ Put this in your `Cargo.toml`:
 
 ```toml
 [dependencies]
-google-signin = "0.2.0"
+google-signin = "0.2.1"
 ```
 
 And this in your crate root:
