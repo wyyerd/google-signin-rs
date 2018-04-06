@@ -2,7 +2,7 @@ Google Sign-In for Rust
 =======================
 
 Rust API bindings for Google Sign-in.  
-See (authenticating with a backend server)[https://developers.google.com/identity/sign-in/web/backend-auth].
+See [authenticating with a backend server](https://developers.google.com/identity/sign-in/web/backend-auth).
 
 ## Usage
 Put this in your `Cargo.toml`:
