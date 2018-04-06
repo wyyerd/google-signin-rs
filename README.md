@@ -1,6 +1,9 @@
 Google Sign-In for Rust
 =======================
 
+[![google-signin on crates.io](https://img.shields.io/crates/v/google-signin.svg)](https://crates.io/crates/google-signin)
+[![google-signin on docs.rs](https://docs.rs/google-signin/badge.svg)](https://docs.rs/google-signin)
+
 Rust API bindings for Google Sign-in.  
 See [authenticating with a backend server](https://developers.google.com/identity/sign-in/web/backend-auth).
 
