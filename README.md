@@ -1,7 +1,8 @@
-google-oauth2-rs
-=========
+Google Sign-In for Rust
+=======================
 
-Rust bindings for the Google OAuth2 Server API
+Rust API bindings for Google Sign-in.  
+See (authenticating with a backend server)[https://developers.google.com/identity/sign-in/web/backend-auth].
 
 ## Usage
 Put this in your `Cargo.toml`:

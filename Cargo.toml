@@ -1,7 +1,7 @@
 [package]
 name = "google-signin"
 version = "0.2.0"
-description = "API bindings for the Google OAuth2 Server API"
+description = "API bindings for Google Sign-In"
 authors = ["Kevin Stenerson <kevin@rapiditynetworks.com>"]
 license = "MIT/Apache-2.0"
 keywords = ["google", "signin", "oauth", "oauth2", "api"]
