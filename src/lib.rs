@@ -14,8 +14,8 @@
 //!
 //! # fn main() {
 //! let mut client = google_signin::Client::new();
-//! client.audiences.push("YOUR_CLIENT_ID.apps.googleusercontent.com"); // required
-//! client.hosted_domains.push("YOUR_HOSTED_DOMAIN.tld"); // optional
+//! client.audiences.push("YOUR_CLIENT_ID.apps.googleusercontent.com".to_string()); // required
+//! client.hosted_domains.push("YOUR_HOSTED_DOMAIN.tld".to_string()); // optional
 //! # }
 //! ```
 //!
@@ -23,11 +23,6 @@
 //! it using the client's `verify` method:
 //!
 //! ```
-//! # extern crate google_signin;
-//! # extern crate serde;
-//! # extern crate serde_derive;
-//! #
-//! #[derive(Deserialize)]
 //! struct GoogleLogin {
 //!     token: String,
 //! }
@@ -38,7 +33,7 @@
 //! println!("Success! Signed-in as {}", id_info.sub);
 //!
 //! // Alternative: Inspect the ID before verifying it
-//! let id_info = client.get_slow_unverified(&data.token).expect("Expected token to exist");
+//! let id_info = client.get_slow_unverified(&request.token).expect("Expected token to exist");
 //! let ok = id_info.verify(&client).is_ok();
 //! println!("Ok: {}, Info: {:?}", ok, id_info);
 //! # }
