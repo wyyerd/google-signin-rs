@@ -26,6 +26,9 @@ pub struct IdInfo {
 }
 
 impl IdInfo {
+    // Check the issuer, audiences, and (optionally) hosted domains of the IdInfo.
+    //
+    // Returns an error if the client has no configured audiences.
     pub fn verify(&self, client: &Client) -> Result<(), Error> {
         // Check the id was authorized by google
         match self.iss.as_str() {
