@@ -26,7 +26,7 @@ And then you can verify a google JSON web token
 ```rust
 use google_signin;
 let mut client = google_signin::Client::new();
-client.audiences.push(YOUR_CLIENT_ID); // recommended
+client.audiences.push(YOUR_CLIENT_ID); // required
 client.hosted_domains.push(YOUR_HOSTED_DOMAIN); // optional
 
 // Let the crate handle everything for you
