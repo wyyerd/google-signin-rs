@@ -1,5 +1,5 @@
-use client::Client;
-use error::Error;
+use crate::client::Client;
+use crate::error::Error;
 
 #[derive(Debug, Deserialize)]
 pub struct IdInfo {
