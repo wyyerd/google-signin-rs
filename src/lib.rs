@@ -27,13 +27,14 @@
 //!     token: String,
 //! }
 //!
-//! # fn handler(client: &google_signin::Client, request: GoogleLogin) {
+//! # async fn handler(client: &google_signin::Client, request: GoogleLogin) {
+//! let mut certs_cache = google_signin::CachedCerts::new();
 //! // Recommended: Let the crate handle everything for you
-//! let id_info = client.verify(&request.token).expect("Expected token to be valid");
+//! let id_info = client.verify(&request.token, &mut certs_cache).await.expect("Expected token to be valid");
 //! println!("Success! Signed-in as {}", id_info.sub);
 //!
 //! // Alternative: Inspect the ID before verifying it
-//! let id_info = client.get_slow_unverified(&request.token).expect("Expected token to exist");
+//! let id_info = client.get_slow_unverified(&request.token).await.expect("Expected token to exist");
 //! let ok = id_info.verify(&client).is_ok();
 //! println!("Ok: {}, Info: {:?}", ok, id_info);
 //! # }
@@ -54,5 +55,9 @@ mod error;
 mod token;
 
 pub use client::Client;
+pub use client::CachedCerts;
 pub use error::Error;
 pub use token::IdInfo;
+
+#[cfg(test)]
+mod test;

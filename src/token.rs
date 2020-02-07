@@ -2,14 +2,14 @@ use crate::client::Client;
 use crate::error::Error;
 
 #[derive(Debug, Deserialize)]
-pub struct IdInfo {
+pub struct IdInfo<EF=bool, TM=u64> {
     /// These six fields are included in all Google ID Tokens.
     pub iss: String,
     pub sub: String,
     pub azp: String,
     pub aud: String,
-    pub iat: String,
-    pub exp: String,
+    pub iat: TM,
+    pub exp: TM,
 
     /// This value indicates the user belongs to a Google Hosted Domain
     pub hd: Option<String>,
@@ -17,7 +17,7 @@ pub struct IdInfo {
     /// These seven fields are only included when the user has granted the "profile" and
     /// "email" OAuth scopes to the application.
     pub email: Option<String>,
-    pub email_verified: Option<String>,  // eg. "true" (but unusually as a string)
+    pub email_verified: Option<EF>,  // eg. "true" (but unusually as a string)
     pub name: Option<String>,
     pub picture: Option<String>,
     pub given_name: Option<String>,
