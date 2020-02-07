@@ -76,7 +76,7 @@ fn send<T: serde::de::DeserializeOwned>(request: RequestBuilder) -> Result<T, Er
     response.read_to_string(&mut body)?;
     let status = response.status_raw().0;
     match status {
-        200...299 => {}
+        200..=299 => {}
         _ => { return Err(Error::InvalidToken); }
     }
 
