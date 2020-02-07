@@ -6,7 +6,7 @@ use serde_json;
 #[derive(Debug)]
 pub enum Error {
     DecodeJson(serde_json::Error),
-    ConnectionError(Box<std::error::Error + Send + Sync + 'static>),
+    ConnectionError(Box<dyn std::error::Error + Send + Sync + 'static>),
     InvalidToken,
     InvalidIssuer,
     InvalidAudience,
@@ -25,7 +25,7 @@ impl std::error::Error for Error {
         }
     }
 
-    fn cause(&self) -> Option<&std::error::Error> {
+    fn cause(&self) -> Option<&dyn std::error::Error> {
         match *self {
             Error::DecodeJson(ref err) => Some(err),
             Error::ConnectionError(ref err) => Some(&**err),
