@@ -1,13 +1,13 @@
-use std::{self, fmt, io};
 use hyper;
 use serde_json;
+use std::{self, fmt, io, sync::Arc};
 
 /// A network or validation error
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub enum Error {
-    DecodeJson(serde_json::Error),
-    JSONWebToken(jsonwebtoken::errors::Error),
-    ConnectionError(Box<dyn std::error::Error + Send + Sync + 'static>),
+    DecodeJson(Arc<serde_json::Error>),
+    JSONWebToken(Arc<jsonwebtoken::errors::Error>),
+    ConnectionError(Arc<dyn std::error::Error + Send + Sync + 'static>),
     InvalidKey,
     InvalidToken,
     InvalidIssuer,
@@ -31,7 +31,7 @@ impl std::error::Error for Error {
 
     fn cause(&self) -> Option<&dyn std::error::Error> {
         match *self {
-            Error::DecodeJson(ref err) => Some(err),
+            Error::DecodeJson(ref err) => Some(&**err),
             Error::ConnectionError(ref err) => Some(&**err),
             _ => None,
         }
@@ -48,31 +48,33 @@ impl fmt::Display for Error {
             Error::InvalidToken => f.write_str("Token was not recognized by google"),
             Error::InvalidIssuer => f.write_str("Token was not issued by google"),
             Error::InvalidAudience => f.write_str("Token is for a different google application"),
-            Error::InvalidHostedDomain => f.write_str("User is not a member of the hosted domain(s)"),
+            Error::InvalidHostedDomain => {
+                f.write_str("User is not a member of the hosted domain(s)")
+            }
         }
     }
 }
 
 impl From<io::Error> for Error {
     fn from(err: io::Error) -> Error {
-        Error::ConnectionError(Box::new(err))
+        Error::ConnectionError(Arc::new(err))
     }
 }
 
 impl From<hyper::Error> for Error {
     fn from(err: hyper::Error) -> Error {
-        Error::ConnectionError(Box::new(err))
+        Error::ConnectionError(Arc::new(err))
     }
 }
 
 impl From<serde_json::Error> for Error {
     fn from(err: serde_json::Error) -> Error {
-        Error::DecodeJson(err)
+        Error::DecodeJson(Arc::new(err))
     }
 }
 
 impl From<jsonwebtoken::errors::Error> for Error {
     fn from(err: jsonwebtoken::errors::Error) -> Error {
-        Error::JSONWebToken(err)
+        Error::JSONWebToken(Arc::new(err))
     }
 }

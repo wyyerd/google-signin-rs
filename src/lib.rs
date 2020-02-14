@@ -28,9 +28,8 @@
 //! }
 //!
 //! # async fn handler(client: &google_signin::Client, request: GoogleLogin) {
-//! let mut certs_cache = google_signin::CachedCerts::new();
 //! // Recommended: Let the crate handle everything for you
-//! let id_info = client.verify(&request.token, &mut certs_cache).await.expect("Expected token to be valid");
+//! let id_info = client.verify(&request.token).await.expect("Expected token to be valid");
 //! println!("Success! Signed-in as {}", id_info.sub);
 //!
 //! // Alternative: Inspect the ID before verifying it
@@ -41,10 +40,10 @@
 //! ```
 
 extern crate hyper;
-#[cfg(feature = "with-rustls")]
-extern crate hyper_rustls;
 #[cfg(feature = "with-openssl")]
 extern crate hyper_openssl;
+#[cfg(feature = "with-rustls")]
+extern crate hyper_rustls;
 extern crate serde;
 #[macro_use]
 extern crate serde_derive;
@@ -54,8 +53,7 @@ mod client;
 mod error;
 mod token;
 
-pub use client::Client;
-pub use client::CachedCerts;
+pub use client::{Certificates, Client};
 pub use error::Error;
 pub use token::IdInfo;
 
