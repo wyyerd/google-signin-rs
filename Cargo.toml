@@ -1,5 +1,6 @@
 [package]
 name = "google-signin"
+edition = "2018"
 version = "0.3.0"
 description = "API bindings for Google Sign-In"
 authors = ["Kevin Stenerson <kstenerson@developers.wyyerd.com>"]
@@ -16,9 +17,16 @@ with-rustls = ["hyper-rustls"]
 with-openssl = ["hyper-openssl"]
 
 [dependencies]
-hyper = "^0.10"
-hyper-rustls = { version = "^0.6", optional = true }
-hyper-openssl = { version = "^0.2", optional = true }
+hyper = "^0.13"
+hyper-rustls = { version = "^0.19", optional = true }
+hyper-openssl = { version = "^0.8", optional = true }
+bytes = "^0.5"
 serde = "^1.0"
 serde_derive = "^1.0"
 serde_json = "^1.0"
+jsonwebtoken = "^7"
+cache_control = "0.1.0"
+
+[dev-dependencies]
+tokio = { version = "0.2", features = ["full"] }
+futures = "0.3"

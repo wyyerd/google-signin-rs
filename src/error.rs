@@ -6,7 +6,9 @@ use serde_json;
 #[derive(Debug)]
 pub enum Error {
     DecodeJson(serde_json::Error),
-    ConnectionError(Box<std::error::Error + Send + Sync + 'static>),
+    JSONWebToken(jsonwebtoken::errors::Error),
+    ConnectionError(Box<dyn std::error::Error + Send + Sync + 'static>),
+    InvalidKey,
     InvalidToken,
     InvalidIssuer,
     InvalidAudience,
@@ -18,6 +20,8 @@ impl std::error::Error for Error {
         match *self {
             Error::DecodeJson(ref err) => err.description(),
             Error::ConnectionError(ref err) => err.description(),
+            Error::JSONWebToken(ref err) => err.description(),
+            Error::InvalidKey => "invalid key",
             Error::InvalidToken => "invalid token",
             Error::InvalidIssuer => "invalid issuer",
             Error::InvalidAudience => "invalid audience",
@@ -25,7 +29,7 @@ impl std::error::Error for Error {
         }
     }
 
-    fn cause(&self) -> Option<&std::error::Error> {
+    fn cause(&self) -> Option<&dyn std::error::Error> {
         match *self {
             Error::DecodeJson(ref err) => Some(err),
             Error::ConnectionError(ref err) => Some(&**err),
@@ -39,6 +43,8 @@ impl fmt::Display for Error {
         match *self {
             Error::DecodeJson(ref err) => err.fmt(f),
             Error::ConnectionError(ref err) => err.fmt(f),
+            Error::JSONWebToken(ref err) => err.fmt(f),
+            Error::InvalidKey => f.write_str("Token does not match any known key"),
             Error::InvalidToken => f.write_str("Token was not recognized by google"),
             Error::InvalidIssuer => f.write_str("Token was not issued by google"),
             Error::InvalidAudience => f.write_str("Token is for a different google application"),
@@ -62,5 +68,11 @@ impl From<hyper::Error> for Error {
 impl From<serde_json::Error> for Error {
     fn from(err: serde_json::Error) -> Error {
         Error::DecodeJson(err)
+    }
+}
+
+impl From<jsonwebtoken::errors::Error> for Error {
+    fn from(err: jsonwebtoken::errors::Error) -> Error {
+        Error::JSONWebToken(err)
     }
 }
