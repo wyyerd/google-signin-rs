@@ -1,12 +1,12 @@
 [package]
 name = "google-signin"
 edition = "2018"
-version = "0.3.0"
+version = "0.3.1"
 description = "API bindings for Google Sign-In"
 authors = ["Kevin Stenerson <kstenerson@developers.wyyerd.com>"]
 license = "MIT/Apache-2.0"
 readme = "README.md"
-repository = "https://github.com/wyyerd/google-signin"
+repository = "https://github.com/wyyerd/google-signin-rs"
 documentation = "https://docs.rs/google-signin"
 keywords = ["google", "signin", "oauth", "oauth2", "api"]
 categories = ["api-bindings"]
