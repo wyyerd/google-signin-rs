@@ -1,7 +1,7 @@
 [package]
 name = "google-signin"
 edition = "2018"
-version = "0.3.1"
+version = "0.4.0"
 description = "API bindings for Google Sign-In"
 authors = ["Kevin Stenerson <kstenerson@developers.wyyerd.com>"]
 license = "MIT/Apache-2.0"
@@ -17,15 +17,14 @@ with-rustls = ["hyper-rustls"]
 with-openssl = ["hyper-openssl"]
 
 [dependencies]
-hyper = "^0.13"
-hyper-rustls = { version = "^0.19", optional = true }
-hyper-openssl = { version = "^0.8", optional = true }
-bytes = "^0.5"
-serde = "^1.0"
-serde_derive = "^1.0"
-serde_json = "^1.0"
-jsonwebtoken = "^7"
-cache_control = "0.1.0"
+hyper = "0.13"
+hyper-rustls = { version = "0.21", optional = true }
+hyper-openssl = { version = "0.8", optional = true }
+bytes = "0.5"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+jsonwebtoken = "7"
+thiserror = "1"
 
 [dev-dependencies]
 tokio = { version = "0.2", features = ["full"] }
