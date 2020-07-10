@@ -1,5 +1,5 @@
 use crate::client::Client;
-use crate::error::Error;
+use crate::Error;
 use serde::Deserialize;
 
 #[derive(Deserialize)]
