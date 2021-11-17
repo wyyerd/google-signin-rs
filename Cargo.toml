@@ -12,14 +12,14 @@ keywords = ["google", "signin", "oauth", "oauth2", "api"]
 categories = ["api-bindings"]
 
 [features]
-default = ["with-rustls"]
-with-rustls = ["hyper-rustls"]
+default = ["with-hypertls"]
+with-hypertls = ["hyper-tls"]
 with-openssl = ["hyper-openssl"]
 
 [dependencies]
-hyper = "^0.13"
-hyper-rustls = { version = "^0.19", optional = true }
-hyper-openssl = { version = "^0.8", optional = true }
+hyper = { version = "0.14", features = ["client", "http2"] }
+hyper-tls = { version = "^0.5", optional = true }
+hyper-openssl = { version = "^0.9", optional = true }
 bytes = "^0.5"
 serde = "^1.0"
 serde_derive = "^1.0"
@@ -28,5 +28,5 @@ jsonwebtoken = "^7"
 cache_control = "0.1.0"
 
 [dev-dependencies]
-tokio = { version = "0.2", features = ["full"] }
+tokio = { version = "1", features = ["full"] }
 futures = "0.3"

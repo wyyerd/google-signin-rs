@@ -16,19 +16,6 @@ pub enum Error {
 }
 
 impl std::error::Error for Error {
-    fn description(&self) -> &str {
-        match *self {
-            Error::DecodeJson(ref err) => err.description(),
-            Error::ConnectionError(ref err) => err.description(),
-            Error::JSONWebToken(ref err) => err.description(),
-            Error::InvalidKey => "invalid key",
-            Error::InvalidToken => "invalid token",
-            Error::InvalidIssuer => "invalid issuer",
-            Error::InvalidAudience => "invalid audience",
-            Error::InvalidHostedDomain => "invalid hosted domain",
-        }
-    }
-
     fn cause(&self) -> Option<&dyn std::error::Error> {
         match *self {
             Error::DecodeJson(ref err) => Some(err),
