@@ -34,7 +34,8 @@ let id_info = client.verify(&data.token).expect("Expected token to be valid");
 println!("Success! Signed-in as {}", id_info.sub);
 
 // Inspect the ID before verifying it
-let id_info = client.get_slow_unverified(&data.token).expect("Expected token to exist");
+let mut certs_cache = google_signin::CachedCerts::new();
+let id_info = client.get_slow_unverified(&data.token, &mut certs_cache).await.expect("Expected token to exist");
 let ok = id_info.verify(&client).is_ok();
 println!("Ok: {}, Info: {:?}", ok, id_info);
 ```
