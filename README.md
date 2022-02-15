@@ -12,7 +12,7 @@ Put this in your `Cargo.toml`:
 
 ```toml
 [dependencies]
-google-signin = "0.3.0"
+google-signin = "0.4.0"
 ```
 
 And this in your crate root:
@@ -34,7 +34,9 @@ let id_info = client.verify(&data.token).expect("Expected token to be valid");
 println!("Success! Signed-in as {}", id_info.sub);
 
 // Inspect the ID before verifying it
-let id_info = client.get_slow_unverified(&data.token).expect("Expected token to exist");
+let mut certs = google_signin::CachedCerts::new();
+certs.refresh_if_needed().await.expect("Failed refreshing certs");
+let id_info = client.get_slow_unverified(&data.token, &mut certs).await.expect("Expected token to exist");
 let ok = id_info.verify(&client).is_ok();
 println!("Ok: {}, Info: {:?}", ok, id_info);
 ```
