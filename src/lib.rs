@@ -41,10 +41,10 @@
 //! ```
 
 extern crate hyper;
-#[cfg(feature = "with-rustls")]
-extern crate hyper_rustls;
 #[cfg(feature = "with-openssl")]
 extern crate hyper_openssl;
+#[cfg(feature = "with-rustls")]
+extern crate hyper_rustls;
 extern crate serde;
 #[macro_use]
 extern crate serde_derive;
@@ -54,8 +54,8 @@ mod client;
 mod error;
 mod token;
 
-pub use client::Client;
 pub use client::CachedCerts;
+pub use client::Client;
 pub use error::Error;
 pub use token::IdInfo;
 
