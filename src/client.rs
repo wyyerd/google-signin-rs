@@ -31,6 +31,7 @@ struct CertsObject {
     keys: Vec<Cert>,
 }
 
+#[allow(dead_code)]
 #[derive(Debug, Clone, Deserialize)]
 struct Cert {
     kid: String,
@@ -195,10 +196,8 @@ impl Client {
             if let Ok(value) = value.to_str() {
                 if let Some(cc) = cache_control::CacheControl::from_value(value) {
                     if let Some(max_age) = cc.max_age {
-                        let seconds = max_age.whole_seconds();
-                        if seconds >= 0 {
-                            *cache = Some(Instant::now() + Duration::from_secs(seconds as u64));
-                        }
+                        let seconds = max_age.as_secs();
+                        *cache = Some(Instant::now() + Duration::from_secs(seconds as u64));
                     }
                 }
             }

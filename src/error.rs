@@ -1,6 +1,6 @@
-use std::{self, fmt, io};
 use hyper;
 use serde_json;
+use std::{self, fmt, io};
 
 /// A network or validation error
 #[derive(Debug)]
@@ -35,7 +35,9 @@ impl fmt::Display for Error {
             Error::InvalidToken => f.write_str("Token was not recognized by google"),
             Error::InvalidIssuer => f.write_str("Token was not issued by google"),
             Error::InvalidAudience => f.write_str("Token is for a different google application"),
-            Error::InvalidHostedDomain => f.write_str("User is not a member of the hosted domain(s)"),
+            Error::InvalidHostedDomain => {
+                f.write_str("User is not a member of the hosted domain(s)")
+            }
         }
     }
 }
