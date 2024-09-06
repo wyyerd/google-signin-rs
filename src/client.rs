@@ -195,7 +195,7 @@ impl Client {
             if let Ok(value) = value.to_str() {
                 if let Some(cc) = cache_control::CacheControl::from_value(value) {
                     if let Some(max_age) = cc.max_age {
-                        let seconds = max_age.num_seconds();
+                        let seconds = max_age.whole_seconds();
                         if seconds >= 0 {
                             *cache = Some(Instant::now() + Duration::from_secs(seconds as u64));
                         }
